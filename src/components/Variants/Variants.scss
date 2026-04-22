@@ -1,0 +1,89 @@
+.Variants {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  // padding-top: 20px;
+}
+
+.Variant {
+  width: 100%;
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 200px;
+  padding: 18.5px 10px;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.Variants__letter {
+  width: 28px;
+  height: 28px;
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 18px;
+  line-height: 48px;
+  letter-spacing: 0;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 11px;
+  padding-right: 9px;
+  padding-bottom: 11px;
+  padding-left: 10px;
+  position: absolute;
+  top: -15px;
+  left: 5px;
+  font-family: "MTSWideMedium";
+}
+
+.Variants__text {
+  color: #ff0032;
+  font-size: 15px;
+  line-height: 15px;
+  text-align: center;
+  font-family: "MTSTextMedium";
+  white-space: pre-line;
+  margin: 0;
+}
+
+@media (max-height: 800px) {
+  .Variants {
+    gap: 10px;
+    width: 100%;
+  }
+
+  .Variant {
+    padding: 15.5px 10px;
+  }
+
+  .Variants__letter {
+    width: 22px;
+    height: 22px;
+
+    font-size: 16px;
+    line-height: 44px;
+    letter-spacing: 0;
+
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+
+    top: -10px;
+    left: 5px;
+  }
+
+  .Variants__text {
+    font-size: 13px;
+    line-height: 15px;
+  }
+}

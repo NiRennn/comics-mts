@@ -1,0 +1,76 @@
+.PromocodeWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.Promocode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 200px;
+  border: 1px dashed #ffffff;
+  padding: 10px;
+  background-color: #ffffff24;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+}
+
+.Promocode:active {
+  transform: scale(0.98);
+}
+
+.Promocode__text {
+  color: #fffdfd;
+  font-size: 16px;
+  line-height: 100%;
+  text-transform: uppercase;
+  text-align: center;
+  font-family: "MTSWideBlack";
+}
+
+.Promocode__img {
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.Promocode__message {
+  min-height: 16px;
+  font-size: 12px;
+  line-height: 1;
+  font-family: "MTSSansRegular";
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.Promocode__message.show {
+  opacity: 1;
+}
+
+.Promocode__message.success {
+  color: #ffffff;
+}
+
+.Promocode__message.error {
+  color: #ffd7d7;
+}
+
+.Promocode.is-copied {
+  border-color: #ffffff;
+  background-color: #ffffff33;
+}
+
+.Promocode.is-error {
+  border-color: #ffd7d7;
+}

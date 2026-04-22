@@ -1,0 +1,124 @@
+.Modal {
+  position: fixed;
+  z-index: 1000;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  max-width: 500px;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: rgba(0, 0, 0, 0.17);
+  backdrop-filter: blur(23px);
+  -webkit-backdrop-filter: blur(23px);
+}
+
+.Modal--opening {
+  animation: modal-fade-in 0.4s ease forwards;
+}
+
+.Modal--closing {
+  animation: modal-fade-out 0.4s ease forwards;
+}
+
+.Modal__content {
+  width: 100%;
+  max-width: 500px;
+
+  min-height: 247px;
+  padding: 39px 17px 30px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+
+  background: #ffffff;
+  border-radius: 36px 36px 0 0;
+}
+
+.Modal__content--opening {
+  animation: modal-slide-up 0.4s ease forwards;
+}
+
+.Modal__content--closing {
+  animation: modal-slide-down 0.4s ease forwards;
+}
+
+.Modal__content_textBlock {
+  width: 100%;
+  max-width: 331px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+
+  text-align: center;
+  padding: 0 12px;
+}
+
+.Modal__content_header {
+  margin: 0;
+
+  color: #000000;
+  font-size: 28px;
+  line-height: 35px;
+  text-align: center;
+  font-family: "MTSWideBold";
+}
+
+.Modal__content_text {
+  margin: 0;
+
+  color: #000000;
+  font-size: 16px;
+  line-height: 18px;
+  text-align: center;
+  font-family: "MTSSansRegular";
+}
+
+@keyframes modal-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes modal-slide-down {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}

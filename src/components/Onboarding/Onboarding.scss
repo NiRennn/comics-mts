@@ -1,0 +1,137 @@
+.Onboarding {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.Onboarding__background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.bg {
+  z-index: 0;
+}
+
+.dots {
+  z-index: 1;
+}
+
+.Onboarding__girl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 3;
+}
+
+.Onboarding__girlCut {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 6;
+  width: 45%;
+}
+
+.Onboarding__blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 4;
+}
+
+.Onboarding__logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 5;
+}
+
+.Onboarding__content {
+  width: 100%;
+  // height: 65dvh;
+  overflow: hidden;
+  background-image: url("../../assets/images/onboarding/ob-panel.png");
+  background-repeat: no-repeat;
+  background-position: top;
+  background-size: cover;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+}
+
+.Onboarding__content_content {
+  padding: 80px 18px 30px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.Onboarding__content_textBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.Onboarding__content_textBlock_title {
+  color: #ffffff;
+  font-size: 26px;
+  line-height: 33px;
+  letter-spacing: 0;
+  text-align: center;
+  font-family: "MTSExtBold";
+}
+
+.Onboarding__content_textBlock_subtitle {
+  font-family: "MTSSansRegular";
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.Onboarding__content_buttonBlock {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+@media (max-height: 800px) {
+  .Onboarding__content_textBlock_title {
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  .Onboarding__content_textBlock_subtitle {
+    font-size: 14px;
+    line-height: 16px;
+  }
+  .Onboarding__content_content {
+    padding: 55px 14px 20px;
+    gap: 10px;
+  }
+  .Onboarding__content_buttonBlock {
+    gap: 5px;
+  }
+}

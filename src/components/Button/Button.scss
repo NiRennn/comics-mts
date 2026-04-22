@@ -1,0 +1,109 @@
+.btn {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 100px;
+  width: 100%;
+  height: 53.67px;
+  padding: 10px;
+  position: relative;
+  z-index: 2;
+
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0;
+  text-transform: uppercase;
+
+  transition:
+    transform 0.06s ease,
+    opacity 0.15s ease,
+    filter 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    transform: scale(0.99);
+  }
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.btn--full {
+  width: 100%;
+}
+
+.btn--primary {
+  background: #ffffff;
+  color: #ff0032;
+  font-weight: 900;
+  font-size: 18px;
+  font-family: "MTSWideBlack";
+}
+
+.btn--secondary {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  font-weight: 500;
+  font-family: "MTSWideMedium";
+}
+
+.btn--secondary2 {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  font-weight: 500;
+  font-family: "MTSWideBlack";
+}
+
+.btn--modal {
+  background: #ff0032;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 500;
+  height: 69px;
+}
+
+.btn--blocked,
+.btn--blocked:disabled {
+  background-color: #c01d50;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+}
+
+.btn__spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  animation: btnSpin 0.8s linear infinite;
+  opacity: 0.9;
+}
+
+@keyframes btnSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-height: 800px) {
+  .btn {
+    font-size: 16px;
+    height: 48px;
+  }
+
+  .btn--primary {
+    background: #ffffff;
+    color: #ff0032;
+    font-weight: 900;
+    font-size: 16px;
+    font-family: "MTSWideBlack";
+  }
+}
