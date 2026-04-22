@@ -6,8 +6,8 @@ import Loader from "../Loader/Loader";
 import {  useEffect } from "react";
 import appRoutes from "../../routes/routes";
 import { useNavigate } from "react-router-dom";
-// import { ONBOARDING_IMAGES } from "../../config/preloadAssets";
-// import { preloadImageSrcs } from "../../utils/preload";
+import { ONBOARDING_IMAGES } from "../../config/preloadAssets";
+import { preloadImageSrcs } from "../../utils/preload";
 import { useAppStore } from "../../store/appStore";
 
 function Loading() {
@@ -52,10 +52,10 @@ function Loading() {
     // const effectiveUserId = 5789474743;
     (window as any).__uid = effectiveUserId ?? null;
 
-    // preloadImageSrcs(ONBOARDING_IMAGES).then((results) => {
-    //   const failed = results.filter((r) => !r.ok).map((r) => r.src);
-    //   if (failed.length) console.warn("[preload] failed:", failed);
-    // });
+    preloadImageSrcs(ONBOARDING_IMAGES).then((results) => {
+      const failed = results.filter((r) => !r.ok).map((r) => r.src);
+      if (failed.length) console.warn("[preload] failed:", failed);
+    });
 
     if (!effectiveUserId) {
       console.error("effectiveUserId not found");

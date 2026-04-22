@@ -74,7 +74,7 @@
     )
     calc(
       var(--tg-content-safe-area-inset-bottom, 0px) +
-        var(--tg-safe-area-inset-bottom, 0px) + 24px
+        var(--tg-safe-area-inset-bottom, 0px) + 10px
     )
     calc(
       var(--tg-content-safe-area-inset-left, 0px) +

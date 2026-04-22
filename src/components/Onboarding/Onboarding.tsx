@@ -7,27 +7,41 @@ import girlCut from "../../assets/images/onboarding/ob-girl-cut.png";
 import logo from "../../assets/images/onboarding/ob-logo.png";
 import Button from "../Button/Button";
 import Modal from "../Modal/Modal";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import appRoutes from "../../routes/routes";
+import {
+  ONBOARDING_IMAGES,
+  INFO_IMAGES,
+  FINAL_IMAGES,
+} from "../../config/preloadAssets";
+import { preloadImageSrcs } from "../../utils/preload";
 
-// export const ONBOARDING_IMAGES = [
-//   bg,
-//   bgDots,
-//   blur,
-//   girl,
-//   girlCut,
-//   logo,
-// ] as const;
+
 
 function Onboarding() {
   const navigate = useNavigate();
 
-    const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    preloadImageSrcs(ONBOARDING_IMAGES).then((results) => {
+      const failed = results.filter((r) => !r.ok).map((r) => r.src);
+      if (failed.length) console.warn("[preload] failed:", failed);
+    });
+    preloadImageSrcs(INFO_IMAGES).then((results) => {
+      const failed = results.filter((r) => !r.ok).map((r) => r.src);
+      if (failed.length) console.warn("[preload] failed:", failed);
+    });
+    preloadImageSrcs(FINAL_IMAGES).then((results) => {
+      const failed = results.filter((r) => !r.ok).map((r) => r.src);
+      if (failed.length) console.warn("[preload] failed:", failed);
+    });
+  });
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const openModal = useCallback(() => setIsOpen(true), []);
   const closeModal = useCallback(() => setIsOpen(false), []);
-  
+
   return (
     <div className="Onboarding">
       <img src={bg} alt="" className="Onboarding__background bg" />
@@ -52,13 +66,20 @@ function Onboarding() {
             </p>
           </div>
           <div className="Onboarding__content_buttonBlock">
-            <Button variant="primary" onClick={() => openModal()}>Начать</Button>
+            <Button variant="primary" onClick={() => openModal()}>
+              Начать
+            </Button>
             <Button variant="secondary">Подключить тариф риил</Button>
-            <Button variant="secondary" onClick={() => navigate(appRoutes.INFO)}>о партнерах и призах</Button>
+            <Button
+              variant="secondary"
+              onClick={() => navigate(appRoutes.INFO)}
+            >
+              о партнерах и призах
+            </Button>
           </div>
         </div>
       </div>
-      <Modal open={isOpen} onClose={closeModal}/>
+      <Modal open={isOpen} onClose={closeModal} />
     </div>
   );
 }
