@@ -3,7 +3,7 @@ import bg from "../../assets/images/backgrounds/loader-back.jpg";
 import bgDots from "../../assets/images/backgrounds/loader-dots.png";
 import bgSticks from "../../assets/images/backgrounds/loader-sticks.png";
 import Loader from "../Loader/Loader";
-import { useMemo, useEffect } from "react";
+import {  useEffect } from "react";
 import appRoutes from "../../routes/routes";
 import { useNavigate } from "react-router-dom";
 // import { ONBOARDING_IMAGES } from "../../config/preloadAssets";
@@ -12,26 +12,6 @@ import { useAppStore } from "../../store/appStore";
 
 function Loading() {
   const navigate = useNavigate();
-  const tg = useMemo(() => (window as any)?.Telegram?.WebApp, []);
-
-  const getEffectiveUserId = (): number | null => {
-    try {
-      const idFromUnsafe =
-        tg?.initDataUnsafe?.user?.id != null
-          ? Number(tg.initDataUnsafe.user.id)
-          : NaN;
-      if (Number.isFinite(idFromUnsafe)) return idFromUnsafe;
-
-      const p = new URLSearchParams(window.location.search).get("user_id");
-      const idFromQuery = p ? Number(p) : NaN;
-      if (Number.isFinite(idFromQuery)) return idFromQuery;
-
-      return null;
-    } catch {
-      return null;
-    }
-  };
-
   const pickNextRoute = () => appRoutes.ONBOARDING;
 
   useEffect(() => {
@@ -46,6 +26,27 @@ function Loading() {
       navigate(to, { replace: true });
     };
 
+    const tg = (window as any)?.Telegram?.WebApp;
+    tg?.ready?.();
+
+    const getEffectiveUserId = (): number | null => {
+      try {
+        const idFromUnsafe =
+          tg?.initDataUnsafe?.user?.id != null
+            ? Number(tg.initDataUnsafe.user.id)
+            : NaN;
+        if (Number.isFinite(idFromUnsafe)) return idFromUnsafe;
+
+        const p = new URLSearchParams(window.location.search).get("user_id");
+        const idFromQuery = p ? Number(p) : NaN;
+        if (Number.isFinite(idFromQuery)) return idFromQuery;
+
+        return null;
+      } catch {
+        return null;
+      }
+    };
+
     const effectiveUserId = getEffectiveUserId();
     // const effectiveUserId = 783751626;
     // const effectiveUserId = 5789474743;
@@ -57,6 +58,7 @@ function Loading() {
     // });
 
     if (!effectiveUserId) {
+      console.error("effectiveUserId not found");
       return;
     }
 
@@ -93,7 +95,9 @@ function Loading() {
 
     const fetchUserData = async () => {
       try {
-        const url = new URL("https://work.brandservicebot.ru/api/get_user_data/");
+        const url = new URL(
+          "https://work.brandservicebot.ru/api/get_user_data/",
+        );
         url.searchParams.set("user_id", String(effectiveUserId));
 
         const response = await fetch(url.toString(), {
@@ -157,7 +161,8 @@ function Loading() {
     return () => {
       window.clearTimeout(hard);
     };
-  }, [navigate, tg]);
+  // }, [navigate, tg]);
+  }, [navigate]);
 
   return (
     <div className="Loading">
