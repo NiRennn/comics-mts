@@ -14,6 +14,9 @@ function Loading() {
   const navigate = useNavigate();
   const pickNextRoute = () => appRoutes.ONBOARDING;
 
+    // const tg = (window as any)?.Telegram?.WebApp;
+
+
   useEffect(() => {
     let navigated = false;
 
