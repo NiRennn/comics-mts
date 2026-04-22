@@ -138,7 +138,7 @@ function Final() {
                 : result?.text ?? ""}
           </p>
 
-          {!loading && !error && result?.promocode_text && (
+          {!loading && !error && result?.promocode_text && ( 
             <p className="Final__content_text fbold">
               {result.promocode_text}
             </p>

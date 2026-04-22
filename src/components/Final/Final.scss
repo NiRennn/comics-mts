@@ -13,22 +13,22 @@
   background-position: top;
   background-size: cover;
 
-  padding: calc(
-      var(--tg-content-safe-area-inset-top, 0px) +
-        var(--tg-safe-area-inset-top, 0px) + var(--extra-top-pad, 0px)
-    )
-    calc(
-      var(--tg-content-safe-area-inset-right, 0px) +
-        var(--tg-safe-area-inset-right, 0px)
-    )
-    calc(
-      var(--tg-content-safe-area-inset-bottom, 0px) +
-        var(--tg-safe-area-inset-bottom, 0px)
-    )
-    calc(
-      var(--tg-content-safe-area-inset-left, 0px) +
-        var(--tg-safe-area-inset-left, 0px)
-    );
+  // padding: calc(
+  //     var(--tg-content-safe-area-inset-top, 0px) +
+  //       var(--tg-safe-area-inset-top, 0px) + var(--extra-top-pad, 0px)
+  //   )
+  //   calc(
+  //     var(--tg-content-safe-area-inset-right, 0px) +
+  //       var(--tg-safe-area-inset-right, 0px)
+  //   )
+  // calc(
+  //   var(--tg-content-safe-area-inset-bottom, 0px) +
+  //     var(--tg-safe-area-inset-bottom, 0px)
+  // )
+  //   calc(
+  //     var(--tg-content-safe-area-inset-left, 0px) +
+  //       var(--tg-safe-area-inset-left, 0px)
+  //   );
 }
 
 .Final__dots {
@@ -52,7 +52,14 @@
   background-position: top center;
   background-size: 100% 100%;
 
-  padding: 100px 16px 30px;
+  // padding: 100px 16px 30px;
+  padding-top: 100px;
+  padding-right: 16px;
+  padding-left: 16px;
+  padding-bottom: calc(
+    var(--tg-content-safe-area-inset-bottom, 0px) +
+      var(--tg-safe-area-inset-bottom, 0px)
+  );
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -63,7 +70,10 @@
   position: absolute;
   width: 100%;
   // max-width: 380px;
-  top: 0;
+  top: calc(
+    var(--tg-content-safe-area-inset-top, 0px) +
+      var(--tg-safe-area-inset-top, 0px) + var(--extra-top-pad, 0px)
+  );
   right: 0;
   // z-index: 10;
 }
@@ -95,9 +105,15 @@
 
 @media (max-height: 800px) {
   .Final__content {
-    height: 70%;
+    height: fit-content;
     max-height: 80%;
-    padding: 80px 16px 30px;
+    padding-top: 70px;
+    padding-right: 16px;
+    padding-left: 16px;
+    padding-bottom: calc(
+      var(--tg-content-safe-area-inset-bottom, 0px) +
+        var(--tg-safe-area-inset-bottom, 0px)
+    );
     gap: 7px;
   }
   .Final__content_text {
