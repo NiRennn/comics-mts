@@ -6,22 +6,25 @@
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
-  // padding: calc(
-  //     var(--tg-content-safe-area-inset-top, 0px) +
-  //       var(--tg-safe-area-inset-top, 0px) + var(--extra-top-pad, 0px) + 16px
-  //   )
-  //   calc(
-  //     var(--tg-content-safe-area-inset-right, 0px) +
-  //       var(--tg-safe-area-inset-right, 0px) + 16px
-  //   )
-  //   calc(
-  //     var(--tg-content-safe-area-inset-bottom, 0px) +
-  //       var(--tg-safe-area-inset-bottom, 0px) + 24px
-  //   )
-  //   calc(
-  //     var(--tg-content-safe-area-inset-left, 0px) +
-  //       var(--tg-safe-area-inset-left, 0px) + 16px
-  //   );
+  // background: #f3f9ff;
+}
+
+.Test.is-locked {
+  pointer-events: none;
+}
+
+.Test__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: #f3f9ff;
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.42s ease;
+}
+
+.Test.is-visible .Test__veil {
+  opacity: 0;
 }
 
 .Test__background {
@@ -41,6 +44,44 @@
   z-index: 1;
 }
 
+.Test__fade {
+  opacity: 0;
+  transition:
+    opacity 0.6s ease,
+    transform 0.8s ease;
+  will-change: opacity, transform;
+}
+
+.Test.is-visible .Test__fade {
+  opacity: 1;
+}
+
+.bgLayer {
+  transform: scale(1.02);
+}
+
+.Test.is-visible .bgLayer {
+  transform: scale(1);
+}
+
+.dotsLayer {
+  transform: translateY(-8px);
+  transition-delay: 0.05s;
+}
+
+.Test.is-visible .dotsLayer {
+  transform: translateY(0);
+}
+
+.contentLayer {
+  transform: translateY(18px);
+  transition-delay: 0.12s;
+}
+
+.Test.is-visible .contentLayer {
+  transform: translateY(0);
+}
+
 .Test__content {
   position: relative;
   z-index: 2;
@@ -49,12 +90,39 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  // gap: 16px;
+}
+
+.Test__scrub {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0;
+
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 2500% 100%;
+}
+
+.Test__scrub.is-active {
+  opacity: 1;
+  animation: test-scrub 0.8s steps(24) forwards;
 }
 
 .Test__questionCard {
   width: 100%;
   height: 65%;
+  opacity: 0;
+  transform: translateY(22px) scale(0.985);
+  transition:
+    opacity 0.38s ease,
+    transform 0.55s ease;
+  will-change: opacity, transform;
+}
+
+.Test__questionCard.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .Test__questionImage {
@@ -80,9 +148,6 @@
       var(--tg-content-safe-area-inset-left, 0px) +
         var(--tg-safe-area-inset-left, 0px) + 16px
     );
-
-  // position: relative;
-  // z-index: 5;
 }
 
 .Test__panel {
@@ -96,8 +161,32 @@
   bottom: 0;
   left: 0;
   z-index: 5;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
+
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.6s ease;
+  transition-delay: 0.06s;
+  will-change: opacity, transform;
+}
+
+.Test__panel.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes test-scrub {
+  from {
+    background-position: 0% 0;
+  }
+
+  to {
+    background-position: 100% 0;
+  }
 }
