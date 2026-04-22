@@ -7,8 +7,17 @@ import Onboarding from "./components/Onboarding/Onboarding";
 import Info from './components/Info/Info'
 import Final from "./components/Final/Final";
 import Test from "./components/Test/Test";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function AppRoutes() {
+      const navigate = useNavigate();
+
+
+    useEffect(() => {
+    // window.Telegram.WebApp.ready();
+    navigate(appRoutes.LOADDING, { replace: true });
+  }, []);
 
   return (
     <div className="App">
