@@ -38,7 +38,7 @@ function Loading() {
     let navigated = false;
 
     // console.log(tg.initData);
-    console.log(tg.id)
+    // console.log(tg.id)
 
     const go = (to: string) => {
       if (navigated) return;
