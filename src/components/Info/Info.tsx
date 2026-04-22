@@ -14,6 +14,7 @@ function Info() {
   const tg = useMemo(() => (window as any)?.Telegram?.WebApp, []);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const openModal = useCallback(() => setIsOpen(true), []);
   const closeModal = useCallback(() => setIsOpen(false), []);
@@ -46,29 +47,45 @@ function Info() {
     };
   }, [handleBack, tg]);
 
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setIsVisible(true);
+    });
+
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   return (
-    <div className="Info">
-      <img src={dots} alt="" className="Info__dots" />
+    <div className={`Info ${isVisible ? "is-visible" : ""}`}>
+      <div className="Info__veil" />
+
+      <img src={dots} alt="" className="Info__dots Info__fade dotsLayer" />
 
       <div className="Info__content">
-        <h1 className="Info__content_title">
+        <h1 className="Info__content_title Info__fade titleLayer">
           О&nbsp;партнере
           <br /> и&nbsp;призах
         </h1>
 
-        <div className="Info__content_panel">
+        <div className="Info__content_panel Info__fade panelLayer">
           <div className="Info__content_panel_content">
-            <h1 className="Info__content_title">Призы</h1>
+            <h1 className="Info__content_title Info__fade panelTitleLayer">
+              Призы
+            </h1>
 
-            <p className="Info__content_subtitle m5">
+            <p className="Info__content_subtitle m5 Info__fade panelTextLayer">
               Каждого участника ждёт промокод от&nbsp;современного сервиса
               аренды жилья Colife&nbsp;&mdash; чтобы начать самостоятельную
               жизнь было легче.
             </p>
 
-            <img src={promo} alt="" className="Info__content_promo m25" />
+            <img
+              src={promo}
+              alt=""
+              className="Info__content_promo m25 Info__fade promoLayer"
+            />
 
-            <p className="Info__content_subtitle sbold m25">
+            <p className="Info__content_subtitle sbold m25 Info__fade panelStrongLayer">
               Участники, которые дадут больше всего правильных ответов, смогут
               побороться за&nbsp;главный приз&nbsp;&mdash; годовую аренду комнаты
               в&nbsp;Colife.
@@ -76,7 +93,7 @@ function Info() {
 
             <Button
               variant="primary"
-              className="m25"
+              className="m25 Info__fade buttonLayer"
               onClick={openModal}
             >
               Начать тест
@@ -84,13 +101,13 @@ function Info() {
           </div>
         </div>
 
-        <h1 className="Info__content_title tbold">
+        <h1 className="Info__content_title tbold Info__fade bottomTitleLayer">
           Colife&nbsp;&mdash; это никакого &laquo;бабушкиного&raquo; ремонта:
           только стильные пространства, пинтерест-дизайн и&nbsp;комфортный вайб
           для жизни.
         </h1>
 
-        <div className="Info__content_carousel">
+        <div className="Info__content_carousel Info__fade carouselLayer">
           <div className="Info__content_carousel_track">
             <div className="Info__content_slide">
               <img

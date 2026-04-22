@@ -10,84 +10,38 @@ import Modal from "../Modal/Modal";
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import appRoutes from "../../routes/routes";
-import {
-  ONBOARDING_IMAGES,
-  INFO_IMAGES,
-  FINAL_IMAGES,
-} from "../../config/preloadAssets";
+import { INFO_IMAGES, FINAL_IMAGES } from "../../config/preloadAssets";
 import { preloadImageSrcs } from "../../utils/preload";
 
 function Onboarding() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [isReady, setIsReady] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const openModal = useCallback(() => setIsOpen(true), []);
   const closeModal = useCallback(() => setIsOpen(false), []);
 
   useEffect(() => {
-    let cancelled = false;
+    const id = requestAnimationFrame(() => {
+      setIsVisible(true);
+    });
 
-    const criticalImages = [bg, bgDots, blur, girl, girlCut, logo];
+    preloadImageSrcs(INFO_IMAGES).catch(() => {});
+    preloadImageSrcs(FINAL_IMAGES).catch(() => {});
 
-    const init = async () => {
-      try {
-        const criticalResults = await preloadImageSrcs(criticalImages);
-        const failedCritical = criticalResults
-          .filter((r) => !r.ok)
-          .map((r) => r.src);
-
-        if (failedCritical.length) {
-          console.warn("[preload critical] failed:", failedCritical);
-        }
-
-        if (!cancelled) {
-          requestAnimationFrame(() => {
-            setIsReady(true);
-          });
-        }
-
-        preloadImageSrcs(ONBOARDING_IMAGES).then((results) => {
-          const failed = results.filter((r) => !r.ok).map((r) => r.src);
-          if (failed.length) console.warn("[preload onboarding] failed:", failed);
-        });
-
-        preloadImageSrcs(INFO_IMAGES).then((results) => {
-          const failed = results.filter((r) => !r.ok).map((r) => r.src);
-          if (failed.length) console.warn("[preload info] failed:", failed);
-        });
-
-        preloadImageSrcs(FINAL_IMAGES).then((results) => {
-          const failed = results.filter((r) => !r.ok).map((r) => r.src);
-          if (failed.length) console.warn("[preload final] failed:", failed);
-        });
-      } catch (error) {
-        console.error("[preload] error:", error);
-        if (!cancelled) {
-          setIsReady(true);
-        }
-      }
-    };
-
-    init();
-
-    return () => {
-      cancelled = true;
-    };
+    return () => cancelAnimationFrame(id);
   }, []);
 
   return (
-    <div className={`Onboarding ${isReady ? "is-ready" : ""}`}>
-      <div className="Onboarding__veil" />
+    <div className={`Onboarding ${isVisible ? "is-visible" : ""}`}>
+      <img src={bg} alt="" className="Onboarding__background bg Onboarding__fade bgLayer" />
+      <img src={bgDots} alt="" className="Onboarding__background dots Onboarding__fade dotsLayer" />
+      <img src={blur} alt="" className="Onboarding__blur Onboarding__fade blurLayer" />
+      <img src={girl} alt="" className="Onboarding__girl Onboarding__fade girlLayer" />
+      <img src={girlCut} alt="" className="Onboarding__girlCut Onboarding__fade girlCutLayer" />
+      <img src={logo} alt="" className="Onboarding__logo Onboarding__fade logoLayer" />
 
-      <img src={bg} alt="" className="Onboarding__background bg Onboarding__fadeLayer" />
-      <img src={bgDots} alt="" className="Onboarding__background dots Onboarding__fadeLayer" />
-      <img src={blur} alt="" className="Onboarding__blur Onboarding__fadeLayer Onboarding__blurLayer" />
-      <img src={girl} alt="" className="Onboarding__girl Onboarding__fadeLayer Onboarding__girlLayer" />
-      <img src={girlCut} alt="" className="Onboarding__girlCut Onboarding__fadeLayer Onboarding__girlCutLayer" />
-      <img src={logo} alt="" className="Onboarding__logo Onboarding__fadeLayer Onboarding__logoLayer" />
-
-      <div className="Onboarding__content Onboarding__contentLayer">
+      <div className="Onboarding__content contentLayer">
         <div className="Onboarding__content_content">
           <div className="Onboarding__content_textBlock">
             <h1 className="Onboarding__content_textBlock_title">
@@ -108,9 +62,7 @@ function Onboarding() {
               Начать
             </Button>
 
-            <Button variant="secondary">
-              Подключить тариф риил
-            </Button>
+            <Button variant="secondary">Подключить тариф риил</Button>
 
             <Button
               variant="secondary"

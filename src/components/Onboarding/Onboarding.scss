@@ -6,24 +6,10 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: #dfeaf7;
+  // background: #f3f9ff;
 }
 
-.Onboarding__veil {
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-  background: #f3f9ff;
-  opacity: 1;
-  pointer-events: none;
-  transition: opacity 0.45s ease;
-}
-
-.Onboarding.is-ready .Onboarding__veil {
-  opacity: 0;
-}
-
-.Onboarding__fadeLayer {
+.Onboarding__fade {
   opacity: 0;
   transition:
     opacity 0.6s ease,
@@ -32,7 +18,7 @@
   will-change: opacity, transform, filter;
 }
 
-.Onboarding.is-ready .Onboarding__fadeLayer {
+.Onboarding.is-visible .Onboarding__fade {
   opacity: 1;
 }
 
@@ -53,6 +39,23 @@
   z-index: 1;
 }
 
+.bgLayer {
+  transform: scale(1.02);
+}
+
+.Onboarding.is-visible .bgLayer {
+  transform: scale(1);
+}
+
+.dotsLayer {
+  transform: translateY(-6px);
+  transition-delay: 0.05s;
+}
+
+.Onboarding.is-visible .dotsLayer {
+  transform: translateY(0);
+}
+
 .Onboarding__girl {
   position: absolute;
   top: 0;
@@ -61,13 +64,13 @@
   z-index: 3;
 }
 
-.Onboarding__girlLayer {
+.girlLayer {
   transform: scale(1.03);
+  transition-delay: 0.08s;
 }
 
-.Onboarding.is-ready .Onboarding__girlLayer {
+.Onboarding.is-visible .girlLayer {
   transform: scale(1);
-  transition-delay: 0.08s;
 }
 
 .Onboarding__girlCut {
@@ -78,13 +81,13 @@
   width: 45%;
 }
 
-.Onboarding__girlCutLayer {
-  transform: translateY(-8px);
+.girlCutLayer {
+  transform: translateY(-10px);
+  transition-delay: 0.15s;
 }
 
-.Onboarding.is-ready .Onboarding__girlCutLayer {
+.Onboarding.is-visible .girlCutLayer {
   transform: translateY(0);
-  transition-delay: 0.14s;
 }
 
 .Onboarding__blur {
@@ -95,13 +98,13 @@
   z-index: 4;
 }
 
-.Onboarding__blurLayer {
-  filter: blur(8px);
+.blurLayer {
+  filter: blur(10px);
+  transition-delay: 0.1s;
 }
 
-.Onboarding.is-ready .Onboarding__blurLayer {
+.Onboarding.is-visible .blurLayer {
   filter: blur(0);
-  transition-delay: 0.1s;
 }
 
 .Onboarding__logo {
@@ -112,13 +115,13 @@
   z-index: 5;
 }
 
-.Onboarding__logoLayer {
-  transform: translateY(-10px);
+.logoLayer {
+  transform: translateY(-12px);
+  transition-delay: 0.18s;
 }
 
-.Onboarding.is-ready .Onboarding__logoLayer {
+.Onboarding.is-visible .logoLayer {
   transform: translateY(0);
-  transition-delay: 0.18s;
 }
 
 .Onboarding__content {
@@ -134,18 +137,18 @@
   z-index: 10;
 }
 
-.Onboarding__contentLayer {
+.contentLayer {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(24px);
   transition:
     opacity 0.55s ease,
     transform 0.7s ease;
+  transition-delay: 0.24s;
 }
 
-.Onboarding.is-ready .Onboarding__contentLayer {
+.Onboarding.is-visible .contentLayer {
   opacity: 1;
   transform: translateY(0);
-  transition-delay: 0.24s;
 }
 
 .Onboarding__content_content {

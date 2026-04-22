@@ -1,38 +1,42 @@
-type PreloadResult = { src: string; ok: boolean };
+type PreloadResult = {
+  src: string;
+  ok: boolean;
+};
 
-const loaded = new Set<string>();
-const pending = new Map<string, Promise<PreloadResult>>();
+const imageCache = new Map<string, Promise<PreloadResult>>();
 
-function preloadSrc(src: string): Promise<PreloadResult> {
-  if (loaded.has(src)) {
-    return Promise.resolve({ src, ok: true });
+export function preloadImage(src: string): Promise<PreloadResult> {
+  if (imageCache.has(src)) {
+    return imageCache.get(src)!;
   }
-
-  const existing = pending.get(src);
-  if (existing) return existing;
 
   const promise = new Promise<PreloadResult>((resolve) => {
     const img = new Image();
+    img.decoding = "async";
 
-    img.onload = () => {
-      loaded.add(src);
-      pending.delete(src);
+    img.onload = async () => {
+      try {
+        if ("decode" in img) {
+          await img.decode();
+        }
+      } catch {
+        // ignore decode errors
+      }
+
       resolve({ src, ok: true });
     };
 
     img.onerror = () => {
-      pending.delete(src);
       resolve({ src, ok: false });
     };
 
     img.src = src;
   });
 
-  pending.set(src, promise);
+  imageCache.set(src, promise);
   return promise;
 }
 
 export function preloadImageSrcs(srcs: readonly string[]) {
-  const unique = Array.from(new Set(srcs));
-  return Promise.all(unique.map(preloadSrc));
+  return Promise.all([...new Set(srcs)].map(preloadImage));
 }

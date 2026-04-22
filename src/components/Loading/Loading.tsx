@@ -3,10 +3,14 @@ import bg from "../../assets/images/backgrounds/loader-back.jpg";
 import bgDots from "../../assets/images/backgrounds/loader-dots.png";
 import bgSticks from "../../assets/images/backgrounds/loader-sticks.png";
 import Loader from "../Loader/Loader";
-import {  useEffect } from "react";
+import { useEffect } from "react";
 import appRoutes from "../../routes/routes";
 import { useNavigate } from "react-router-dom";
-import { ONBOARDING_IMAGES } from "../../config/preloadAssets";
+import {
+  ONBOARDING_IMAGES,
+  INFO_IMAGES,
+  FINAL_IMAGES,
+} from "../../config/preloadAssets";
 import { preloadImageSrcs } from "../../utils/preload";
 import { useAppStore } from "../../store/appStore";
 
@@ -14,8 +18,7 @@ function Loading() {
   const navigate = useNavigate();
   const pickNextRoute = () => appRoutes.ONBOARDING;
 
-    // const tg = (window as any)?.Telegram?.WebApp;
-
+  // const tg = (window as any)?.Telegram?.WebApp;
 
   useEffect(() => {
     let navigated = false;
@@ -122,49 +125,35 @@ function Loading() {
         console.error("Error fetching user data:", error);
       }
     };
+    const init = async () => {
+      const minDelay = new Promise((resolve) => setTimeout(resolve, 3000));
+      const hardTimeout = new Promise((resolve) => setTimeout(resolve, 3500));
 
-    fetchUserData();
+      fetchUserData();
 
-    // const asset = (p: string) =>
-    //   new URL(
-    //     `${import.meta.env.BASE_URL.replace(/\/$/, "")}${
-    //       p.startsWith("/") ? p : `/${p}`
-    //     }`,
-    //     window.location.href,
-    //   ).toString();
-    // const images = Array.from(new Set([])).map(asset);
+      const preloadCritical = preloadImageSrcs(ONBOARDING_IMAGES);
+      const preloadSecondary = Promise.allSettled([
+        preloadImageSrcs(INFO_IMAGES),
+        preloadImageSrcs(FINAL_IMAGES),
+      ]);
 
-    // const preload = () => {
-    //   const promises = images.map(
-    //     (src) =>
-    //       new Promise<{ src: string; ok: boolean }>((resolve) => {
-    //         const img = new Image();
-    //         img.decoding = "async";
-    //         img.loading = "eager";
+      try {
+        await Promise.race([
+          Promise.all([preloadCritical, minDelay]),
+          hardTimeout,
+        ]);
+      } catch (e) {
+        console.warn("[loading] preload race failed:", e);
+      }
 
-    //         img.onload = () => resolve({ src, ok: true });
-    //         img.onerror = () => resolve({ src, ok: false });
-
-    //         img.src = src;
-    //       }),
-    //   );
-
-    //   Promise.all(promises).then((results) => {
-    //     const failed = results.filter((r) => !r.ok).map((r) => r.src);
-    //     if (failed.length) {
-    //       console.warn("[preload] assets failed to load:", failed);
-    //     }
-    //   });
-    // };
-    // preload();
-
-    const HARD_TIMEOUT_MS = 3000;
-    const hard = window.setTimeout(() => go(pickNextRoute()), HARD_TIMEOUT_MS);
-
-    return () => {
-      window.clearTimeout(hard);
+      preloadSecondary.catch(() => {});
+      go(pickNextRoute());
     };
-  // }, [navigate, tg]);
+
+    init();
+
+    return () => {};
+    // }, [navigate, tg]);
   }, [navigate]);
 
   return (
