@@ -42,25 +42,26 @@
 
 .Final__content {
   position: relative;
-  height: 100%;
-  // height: auto;
-  max-height: 70%;
   width: 100%;
+  height: auto;
+  max-height: 70%;
+
   background-image: url("../../assets/images/final/f-panel.png");
   background-repeat: no-repeat;
-  background-position: center;
-  //   background-size: cover;
   background-position: top center;
   background-size: 100% 100%;
 
-  // padding: 100px 16px 30px;
-  padding-top: 100px;
+  --hero-overlap: clamp(100px, 24vw, 190px);
+  --hero-max-width: 430px;
+
+  padding-top: calc(var(--hero-overlap) + 24px);
   padding-right: 16px;
   padding-left: 16px;
   padding-bottom: calc(
     var(--tg-content-safe-area-inset-bottom, 0px) +
       var(--tg-safe-area-inset-bottom, 0px) + 10px
   );
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -69,14 +70,22 @@
 
 .Final__img {
   position: absolute;
-  width: 100%;
-  // max-width: 380px;
-  top: calc(
-    var(--tg-content-safe-area-inset-top, 0px) +
-      var(--tg-safe-area-inset-top, 0px) + var(--extra-top-pad, 0px)
-  );
-  right: 0;
-  // z-index: 10;
+  left: 50%;
+  bottom: calc(95% - var(--hero-overlap));
+  transform: translateX(-50%);
+
+  width: min(100%, var(--hero-max-width));
+  height: auto;
+  display: block;
+
+  z-index: 10;
+  pointer-events: none;
+}
+
+.Final__content_textPromo,
+.Final__content_btnBlock {
+  position: relative;
+  z-index: 11;
 }
 
 .Final__content_textPromo {
@@ -165,7 +174,7 @@
     position: relative;
     height: 100%;
     // height: auto;
-    max-height: 65%;
+    max-height: 60%;
     width: 100%;
     gap: 4px;
   }

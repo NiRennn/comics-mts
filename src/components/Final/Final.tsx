@@ -4,11 +4,29 @@ import Promocode from "../Promocode/Promocode";
 import Button from "../Button/Button";
 import { useNavigate } from "react-router-dom";
 import appRoutes from "../../routes/routes";
-import { useAppStore } from "../../store/appStore";
-import { useEffect, useMemo, useState } from "react";
+import { useAppStore, type FinalResponseDto } from "../../store/appStore";import { useEffect, useMemo, useState } from "react";
 
 const API_ORIGIN = "https://work.brandservicebot.ru";
 const FINAL_RESULT_ENDPOINT = `${API_ORIGIN}/api/save_user_data/`;
+
+type ApiPromoCodeDto = {
+  code: string;
+  used_dt: string;
+};
+
+type ApiFinalResponseDto = {
+  success: boolean;
+  correct_answers: number;
+  total_questions: number;
+  result: {
+    id: number;
+    picture: string;
+    text: string;
+    promocode_text: string;
+    promocode_ended_text: string;
+  };
+  promo_code?: ApiPromoCodeDto | null;
+};
 
 const toAbsoluteImageUrl = (src?: string) => {
   if (!src) return "";
@@ -116,13 +134,23 @@ function Final() {
           throw new Error(`Ошибка запроса: ${response.status}`);
         }
 
-        const data = await response.json();
+        const data: ApiFinalResponseDto = await response.json();
 
         if (!data?.success || !data?.result) {
           throw new Error("Бэкенд вернул некорректный ответ");
         }
 
-        setFinalResponse(data);
+        const normalizedData: FinalResponseDto = {
+          success: data.success,
+          correct_answers: data.correct_answers,
+          total_questions: data.total_questions,
+          result: {
+            ...data.result,
+            promocode: data.promo_code?.code ?? null,
+          },
+        };
+
+        setFinalResponse(normalizedData);
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") return;
         console.error("Ошибка получения финального результата:", err);
@@ -135,13 +163,7 @@ function Final() {
     fetchFinalResult();
 
     return () => controller.abort();
-  }, [
-    user,
-    questions,
-    answersPayload,
-    finalResponse,
-    setFinalResponse,
-  ]);
+  }, [user, questions, answersPayload, finalResponse, setFinalResponse]);
 
   const result = finalResponse?.result ?? null;
   const resultImage = toAbsoluteImageUrl(result?.picture);
@@ -199,17 +221,16 @@ function Final() {
     <div className={`Final ${isScreenVisible ? "is-visible" : ""}`}>
       <img src={dots} alt="" className="Final__dots Final__screenFade" />
 
-      {resultImage && (
-        <img
-          src={resultImage}
-          alt="Результат теста"
-          className={`Final__img Final__resultFade ${
-            isResultVisible ? "is-visible" : ""
-          }`}
-        />
-      )}
-
       <div className="Final__content Final__screenFade Final__screenFade--delay">
+        {resultImage && (
+          <img
+            src={resultImage}
+            alt="Результат теста"
+            className={`Final__img Final__resultFade ${
+              isResultVisible ? "is-visible" : ""
+            }`}
+          />
+        )}
         <div></div>
 
         <div className="Final__content_textPromo">
@@ -233,13 +254,23 @@ function Final() {
                 {result?.text ?? ""}
               </p>
 
-              {result?.promocode_text && (
+              {result?.promocode && (
                 <p
                   className={`Final__content_text fbold Final__resultFade Final__resultFade--delay1 ${
                     isResultVisible ? "is-visible" : ""
                   }`}
                 >
                   {result.promocode_text}
+                </p>
+              )}
+
+              {result?.promocode == null && (
+                <p
+                  className={`Final__content_text fbold Final__resultFade Final__resultFade--delay1 ${
+                    isResultVisible ? "is-visible" : ""
+                  }`}
+                >
+                  {result?.promocode_ended_text}
                 </p>
               )}
 

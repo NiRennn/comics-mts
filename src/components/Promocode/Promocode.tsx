@@ -1,33 +1,11 @@
 import "./Promocode.scss";
 import copyImg from "../../assets/icons/copy.svg";
-import { useEffect, useRef, useState } from "react";
 
 type PromocodeProps = {
   text: string;
 };
 
 function Promocode({ text }: PromocodeProps) {
-  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
-  const timerRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) {
-        window.clearTimeout(timerRef.current);
-      }
-    };
-  }, []);
-
-  const resetStatusLater = () => {
-    if (timerRef.current) {
-      window.clearTimeout(timerRef.current);
-    }
-
-    timerRef.current = window.setTimeout(() => {
-      setStatus("idle");
-    }, 1800);
-  };
-
   const fallbackCopy = (value: string) => {
     const textarea = document.createElement("textarea");
     textarea.value = value;
@@ -57,13 +35,8 @@ function Promocode({ text }: PromocodeProps) {
           throw new Error("Fallback copy failed");
         }
       }
-
-      setStatus("success");
-      resetStatusLater();
     } catch (error) {
       console.error("Ошибка копирования:", error);
-      setStatus("error");
-      resetStatusLater();
     }
   };
 
@@ -71,28 +44,13 @@ function Promocode({ text }: PromocodeProps) {
     <div className="PromocodeWrapper">
       <button
         type="button"
-        className={`Promocode ${
-          status === "success" ? "is-copied" : ""
-        } ${status === "error" ? "is-error" : ""}`}
+        className="Promocode"
         onClick={handleCopy}
         aria-label="Скопировать промокод"
       >
         <span className="Promocode__text">{text}</span>
         <img src={copyImg} alt="" className="Promocode__img" />
       </button>
-
-      <span
-        className={`Promocode__message ${
-          status === "success"
-            ? "show success"
-            : status === "error"
-            ? "show error"
-            : ""
-        }`}
-      >
-        {status === "success" && "Промокод скопирован"}
-        {status === "error" && "Не удалось скопировать"}
-      </span>
     </div>
   );
 }

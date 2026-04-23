@@ -33,7 +33,8 @@ export type FinalResultDto = {
   picture: string;
   text: string;
   promocode_text: string;
-  promocode: string;
+  promocode: string | null;
+  promocode_ended_text: string;
 };
 
 export type FinalResponseDto = {
@@ -68,7 +69,7 @@ const initialState = {
   isHydrated: false,
   selectedAnswersByQuestion: {},
   finalResponse: null,
-}; 
+};
 
 export const useAppStore = create<AppState>((set) => ({
   ...initialState,
