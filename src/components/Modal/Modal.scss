@@ -12,9 +12,16 @@
   left: 50%;
   transform: translateX(-50%);
 
-  background: rgba(0, 0, 0, 0.17);
-  backdrop-filter: blur(23px);
-  -webkit-backdrop-filter: blur(23px);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* Включаем blur только там, где он реально поддерживается */
+@supports ((backdrop-filter: blur(23px)) or (-webkit-backdrop-filter: blur(23px))) {
+  .Modal {
+    background: rgba(0, 0, 0, 0.17);
+    backdrop-filter: blur(23px);
+    -webkit-backdrop-filter: blur(23px);
+  }
 }
 
 .Modal--opening {

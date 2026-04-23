@@ -13,6 +13,8 @@ import appRoutes from "../../routes/routes";
 import { INFO_IMAGES, FINAL_IMAGES } from "../../config/preloadAssets";
 import { preloadImageSrcs } from "../../utils/preload";
 
+const TARIFF_URL = "https://ya.ru";
+
 function Onboarding() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -34,12 +36,36 @@ function Onboarding() {
 
   return (
     <div className={`Onboarding ${isVisible ? "is-visible" : ""}`}>
-      <img src={bg} alt="" className="Onboarding__background bg Onboarding__fade bgLayer" />
-      <img src={bgDots} alt="" className="Onboarding__background dots Onboarding__fade dotsLayer" />
-      <img src={blur} alt="" className="Onboarding__blur Onboarding__fade blurLayer" />
-      <img src={girl} alt="" className="Onboarding__girl Onboarding__fade girlLayer" />
-      <img src={girlCut} alt="" className="Onboarding__girlCut Onboarding__fade girlCutLayer" />
-      <img src={logo} alt="" className="Onboarding__logo Onboarding__fade logoLayer" />
+      <img
+        src={bg}
+        alt=""
+        className="Onboarding__background bg Onboarding__fade bgLayer"
+      />
+      <img
+        src={bgDots}
+        alt=""
+        className="Onboarding__background dots Onboarding__fade dotsLayer"
+      />
+      <img
+        src={blur}
+        alt=""
+        className="Onboarding__blur Onboarding__fade blurLayer"
+      />
+      <img
+        src={girl}
+        alt=""
+        className="Onboarding__girl Onboarding__fade girlLayer"
+      />
+      <img
+        src={girlCut}
+        alt=""
+        className="Onboarding__girlCut Onboarding__fade girlCutLayer"
+      />
+      <img
+        src={logo}
+        alt=""
+        className="Onboarding__logo Onboarding__fade logoLayer"
+      />
 
       <div className="Onboarding__content contentLayer">
         <div className="Onboarding__content_content">
@@ -62,8 +88,14 @@ function Onboarding() {
               Начать
             </Button>
 
-            <Button variant="secondary">Подключить тариф риил</Button>
-
+            <Button
+              variant="secondary"
+              onClick={() =>
+                window.open(TARIFF_URL, "_blank", "noopener,noreferrer")
+              }
+            >
+              Подключить тариф риил
+            </Button>
             <Button
               variant="secondary"
               onClick={() => navigate(appRoutes.INFO)}

@@ -47,7 +47,7 @@ function Modal({ open, onClose }: ModalProps) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="rules-title"
-      onClick={handleClose}
+      onClick={handleClose} 
     > 
       <div
         className={`Modal__content ${
