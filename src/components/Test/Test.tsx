@@ -146,7 +146,7 @@ function Test() {
       </div>
     );
   }
-
+ 
   return (
     <div
       className={`Test ${isScreenVisible ? "is-visible" : ""} ${
@@ -183,6 +183,16 @@ function Test() {
             alt={`Вопрос ${currentIndex + 1}`}
             className="Test__questionImage"
           />
+          <div className="Test__questionTest_wrapper">
+          <img
+            src={toAbsoluteImageUrl(currentQuestion.picture_overlay)}
+            alt={`Вопрос ${currentIndex + 1}`}
+            className="Test__questionTest"
+          />
+          </div>
+
+          
+
         </div>
 
         <div className={`Test__panel ${isQuestionVisible ? "is-visible" : ""}`}>
