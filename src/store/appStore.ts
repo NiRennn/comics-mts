@@ -19,6 +19,7 @@ export type AnswerDto = {
 export type QuestionDto = {
   id: number;
   picture: string;
+  text: string;
   answers: AnswerDto[];
 };
 
