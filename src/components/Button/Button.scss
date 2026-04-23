@@ -107,3 +107,12 @@
     font-family: "MTSWideBlack";
   }
 }
+
+@media (max-height: 800px) {
+  .btn {
+    font-size: 14px;
+    height: 44px;
+  }
+
+
+}

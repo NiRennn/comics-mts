@@ -43,6 +43,7 @@
 .Final__content {
   position: relative;
   height: 65%;
+  // height: auto;
   max-height: 80%;
   width: 100%;
   background-image: url("../../assets/images/final/f-panel.png");
@@ -58,7 +59,7 @@
   padding-left: 16px;
   padding-bottom: calc(
     var(--tg-content-safe-area-inset-bottom, 0px) +
-      var(--tg-safe-area-inset-bottom, 0px)
+      var(--tg-safe-area-inset-bottom, 0px) + 10px
   );
   display: flex;
   flex-direction: column;
@@ -105,14 +106,15 @@
 
 @media (max-height: 800px) {
   .Final__content {
-    height: fit-content;
+    // height: fit-content;
+    height: auto;
     max-height: 80%;
     padding-top: 70px;
     padding-right: 16px;
     padding-left: 16px;
     padding-bottom: calc(
       var(--tg-content-safe-area-inset-bottom, 0px) +
-        var(--tg-safe-area-inset-bottom, 0px)
+        var(--tg-safe-area-inset-bottom, 0px) + 10px
     );
     gap: 7px;
   }

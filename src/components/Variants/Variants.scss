@@ -87,3 +87,37 @@
     line-height: 15px;
   }
 }
+
+
+@media (max-height: 650px) {
+  .Variants {
+    gap: 8px;
+    width: 100%;
+  }
+
+  .Variant {
+    padding: 13px 10px;
+  }
+
+  .Variants__letter {
+    width: 22px;
+    height: 22px;
+
+    font-size: 16px;
+    line-height: 44px;
+    letter-spacing: 0;
+
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+
+    top: -10px;
+    left: 5px;
+  }
+
+  .Variants__text {
+    font-size: 13px;
+    line-height: 15px;
+  }
+}
