@@ -42,9 +42,9 @@
 
 .Final__content {
   position: relative;
-  height: 65%;
+  height: 100%;
   // height: auto;
-  max-height: 80%;
+  max-height: 70%;
   width: 100%;
   background-image: url("../../assets/images/final/f-panel.png");
   background-repeat: no-repeat;
@@ -104,6 +104,38 @@
   gap: 7px;
 }
 
+.Final__screenFade {
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  will-change: opacity;
+}
+
+.Final.is-visible .Final__screenFade {
+  opacity: 1;
+}
+
+.Final__screenFade--delay {
+  transition-delay: 0.08s;
+}
+
+.Final__resultFade {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  will-change: opacity;
+}
+
+.Final__resultFade.is-visible {
+  opacity: 1;
+}
+
+.Final__resultFade--delay1 {
+  transition-delay: 0.08s;
+}
+
+.Final__resultFade--delay2 {
+  transition-delay: 0.16s;
+}
+
 @media (max-height: 800px) {
   .Final__content {
     // height: fit-content;
@@ -125,5 +157,22 @@
 
   .Final__content_btnBlock {
     gap: 4px;
+  }
+}
+
+@media (max-height: 650px) {
+  .Final__content {
+    position: relative;
+    height: 100%;
+    // height: auto;
+    max-height: 65%;
+    width: 100%;
+    gap: 4px;
+  }
+
+  .Final__content_textPromo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 }

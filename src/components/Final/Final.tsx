@@ -8,11 +8,38 @@ import { useAppStore } from "../../store/appStore";
 import { useEffect, useMemo, useState } from "react";
 
 const API_ORIGIN = "https://work.brandservicebot.ru";
-const FINAL_RESULT_ENDPOINT = `${API_ORIGIN}/api/save_user_data/`; 
+const FINAL_RESULT_ENDPOINT = `${API_ORIGIN}/api/save_user_data/`;
+
 const toAbsoluteImageUrl = (src?: string) => {
   if (!src) return "";
   if (/^https?:\/\//i.test(src)) return src;
   return `${API_ORIGIN}${src.startsWith("/") ? src : `/${src}`}`;
+};
+
+const preloadSingleImage = (src?: string): Promise<void> => {
+  return new Promise((resolve) => {
+    if (!src) {
+      resolve();
+      return;
+    }
+
+    const img = new Image();
+    img.decoding = "async";
+
+    img.onload = async () => {
+      try {
+        if ("decode" in img) {
+          await img.decode();
+        }
+      } catch {
+        // ignore
+      }
+      resolve();
+    };
+
+    img.onerror = () => resolve();
+    img.src = src;
+  });
 };
 
 function Final() {
@@ -29,12 +56,22 @@ function Final() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isScreenVisible, setIsScreenVisible] = useState(false);
+  const [isResultVisible, setIsResultVisible] = useState(false);
 
   const answersPayload = useMemo(() => {
     return questions
       .map((question) => selectedAnswersByQuestion[question.id])
       .filter((answerId): answerId is number => typeof answerId === "number");
   }, [questions, selectedAnswersByQuestion]);
+
+  useEffect(() => {
+    const rafId = window.requestAnimationFrame(() => {
+      setIsScreenVisible(true);
+    });
+
+    return () => window.cancelAnimationFrame(rafId);
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -109,6 +146,45 @@ function Final() {
   const result = finalResponse?.result ?? null;
   const resultImage = toAbsoluteImageUrl(result?.picture);
 
+  useEffect(() => {
+    let cancelled = false;
+    let rafId: number | null = null;
+
+    const revealResult = async () => {
+      if (loading) {
+        setIsResultVisible(false);
+        return;
+      }
+
+      if (!error && !result) {
+        setIsResultVisible(false);
+        return;
+      }
+
+      if (resultImage) {
+        await Promise.race([
+          preloadSingleImage(resultImage),
+          new Promise((resolve) => window.setTimeout(resolve, 250)),
+        ]);
+      }
+
+      if (cancelled) return;
+
+      rafId = window.requestAnimationFrame(() => {
+        setIsResultVisible(true);
+      });
+    };
+
+    revealResult();
+
+    return () => {
+      cancelled = true;
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
+  }, [loading, error, result, resultImage]);
+
   const handleRetry = () => {
     resetTestProgress();
     navigate(appRoutes.TEST);
@@ -120,32 +196,63 @@ function Final() {
   };
 
   return (
-    <div className="Final">
-      <img src={dots} alt="" className="Final__dots" />
+    <div className={`Final ${isScreenVisible ? "is-visible" : ""}`}>
+      <img src={dots} alt="" className="Final__dots Final__screenFade" />
 
       {resultImage && (
-        <img src={resultImage} alt="Результат теста" className="Final__img" />
+        <img
+          src={resultImage}
+          alt="Результат теста"
+          className={`Final__img Final__resultFade ${
+            isResultVisible ? "is-visible" : ""
+          }`}
+        />
       )}
 
-      <div className="Final__content">
+      <div className="Final__content Final__screenFade Final__screenFade--delay">
         <div></div>
+
         <div className="Final__content_textPromo">
-          <p className="Final__content_text">
-            {loading
-              ? "Загружаем результат..."
-              : error
-                ? error
-                : result?.text ?? ""}
-          </p>
-
-          {!loading && !error && result?.promocode_text && ( 
-            <p className="Final__content_text fbold">
-              {result.promocode_text}
+          {loading ? (
+            <p className="Final__content_text">Загружаем результат...</p>
+          ) : error ? (
+            <p
+              className={`Final__content_text Final__resultFade ${
+                isResultVisible ? "is-visible" : ""
+              }`}
+            >
+              {error}
             </p>
-          )}
+          ) : (
+            <>
+              <p
+                className={`Final__content_text Final__resultFade ${
+                  isResultVisible ? "is-visible" : ""
+                }`}
+              >
+                {result?.text ?? ""}
+              </p>
 
-          {!loading && !error && result?.promocode && (
-            <Promocode text={result.promocode} />
+              {result?.promocode_text && (
+                <p
+                  className={`Final__content_text fbold Final__resultFade Final__resultFade--delay1 ${
+                    isResultVisible ? "is-visible" : ""
+                  }`}
+                >
+                  {result.promocode_text}
+                </p>
+              )}
+
+              {result?.promocode && (
+                <div
+                  className={`Final__resultFade Final__resultFade--delay2 ${
+                    isResultVisible ? "is-visible" : ""
+                  }`}
+                >
+                  <Promocode text={result.promocode} />
+                </div>
+              )}
+            </>
           )}
         </div>
 
