@@ -253,68 +253,70 @@ function Final() {
         )}
         <div></div>
 
-        <div className="Final__content_textPromo">
-          {loading ? (
-            <p className="Final__content_text">Загружаем результат...</p>
-          ) : error ? (
-            <p
-              className={`Final__content_text Final__resultFade ${
-                isResultVisible ? "is-visible" : ""
-              }`}
-            >
-              {error}
-            </p>
-          ) : (
-            <>
+        <div className="scroll">
+          <div className="Final__content_textPromo">
+            {loading ? (
+              <p className="Final__content_text">Загружаем результат...</p>
+            ) : error ? (
               <p
                 className={`Final__content_text Final__resultFade ${
                   isResultVisible ? "is-visible" : ""
                 }`}
               >
-                {result?.text ?? ""}
+                {error}
               </p>
-
-              {result?.promocode && (
+            ) : (
+              <>
                 <p
-                  className={`Final__content_text fbold Final__resultFade Final__resultFade--delay1 ${
+                  className={`Final__content_text Final__resultFade ${
                     isResultVisible ? "is-visible" : ""
                   }`}
                 >
-                  {result.promocode_text}
+                  {result?.text ?? ""}
                 </p>
-              )}
 
-              {result?.promocode == null && (
-                <p
-                  className={`Final__content_text fbold Final__resultFade Final__resultFade--delay1 ${
-                    isResultVisible ? "is-visible" : ""
-                  }`}
-                >
-                  {result?.promocode_ended_text}
-                </p>
-              )}
+                {result?.promocode && (
+                  <p
+                    className={`Final__content_text fbold Final__resultFade Final__resultFade--delay1 ${
+                      isResultVisible ? "is-visible" : ""
+                    }`}
+                  >
+                    {result.promocode_text}
+                  </p>
+                )}
 
-              {result?.promocode && (
-                <div
-                  className={`Final__resultFade Final__resultFade--delay2 ${
-                    isResultVisible ? "is-visible" : ""
-                  }`}
-                >
-                  <Promocode text={result.promocode} />
-                </div>
-              )}
-            </>
-          )}
-        </div>
+                {result?.promocode == null && (
+                  <p
+                    className={`Final__content_text fbold Final__resultFade Final__resultFade--delay1 ${
+                      isResultVisible ? "is-visible" : ""
+                    }`}
+                  >
+                    {result?.promocode_ended_text}
+                  </p>
+                )}
 
-        <div className="Final__content_btnBlock">
-          <Button variant="primary" onClick={handleRetry}>
-            Пройти еще раз
-          </Button>
+                {result?.promocode && (
+                  <div
+                    className={`Final__resultFade Final__resultFade--delay2 ${
+                      isResultVisible ? "is-visible" : ""
+                    }`}
+                  >
+                    <Promocode text={result.promocode} />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
 
-          <Button variant="secondary2" onClick={handleGoToMenu}>
-            В меню
-          </Button>
+          <div className="Final__content_btnBlock">
+            <Button variant="primary" onClick={handleRetry}>
+              Пройти еще раз
+            </Button>
+
+            <Button variant="secondary2" onClick={handleGoToMenu}>
+              В меню
+            </Button>
+          </div>
         </div>
       </div>
     </div>

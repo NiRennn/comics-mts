@@ -18,7 +18,7 @@ function Loading() {
   const navigate = useNavigate();
   const pickNextRoute = () => appRoutes.ONBOARDING;
 
-  const tg = (window as any)?.Telegram?.WebApp;
+  // const tg = (window as any)?.Telegram?.WebApp;
 
   useEffect(() => {
     let navigated = false;
@@ -32,29 +32,29 @@ function Loading() {
       navigate(to, { replace: true });
     };
 
-    // const tg = (window as any)?.Telegram?.WebApp;
-    // tg?.ready?.();
+    const tg = (window as any)?.Telegram?.WebApp;
+    tg?.ready?.();
 
-    // const getEffectiveUserId = (): number | null => {
-    //   try {
-    //     const idFromUnsafe =
-    //       tg?.initDataUnsafe?.user?.id != null
-    //         ? Number(tg.initDataUnsafe.user.id)
-    //         : NaN;
-    //     if (Number.isFinite(idFromUnsafe)) return idFromUnsafe;
+    const getEffectiveUserId = (): number | null => {
+      try {
+        const idFromUnsafe =
+          tg?.initDataUnsafe?.user?.id != null
+            ? Number(tg.initDataUnsafe.user.id)
+            : NaN;
+        if (Number.isFinite(idFromUnsafe)) return idFromUnsafe;
 
-    //     const p = new URLSearchParams(window.location.search).get("user_id");
-    //     const idFromQuery = p ? Number(p) : NaN;
-    //     if (Number.isFinite(idFromQuery)) return idFromQuery;
+        const p = new URLSearchParams(window.location.search).get("user_id");
+        const idFromQuery = p ? Number(p) : NaN;
+        if (Number.isFinite(idFromQuery)) return idFromQuery;
 
-    //     return null;
-    //   } catch {
-    //     return null;
-    //   }
-    // };
+        return null;
+      } catch {
+        return null;
+      }
+    };
 
-    // const effectiveUserId = getEffectiveUserId();
-    const effectiveUserId = 783751626;
+    const effectiveUserId = getEffectiveUserId();
+    // const effectiveUserId = 783751626;
     (window as any).__uid = effectiveUserId ?? null;
 
     preloadImageSrcs(ONBOARDING_IMAGES).then((results) => {
