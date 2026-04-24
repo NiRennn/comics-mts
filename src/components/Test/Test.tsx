@@ -154,7 +154,7 @@ function Test() {
       }`}
     >
       <div className="Test__veil" />
-
+ 
       <img src={bg} alt="" className="Test__background bg Test__fade bgLayer" />
       <img
         src={bgDots}

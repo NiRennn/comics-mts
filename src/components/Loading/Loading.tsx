@@ -12,7 +12,7 @@ import {
   FINAL_IMAGES,
 } from "../../config/preloadAssets";
 import { preloadImageSrcs } from "../../utils/preload";
-import { useAppStore } from "../../store/appStore";
+import { fetchAndHydrateUserData } from "../../api/userData";
 
 function Loading() {
   const navigate = useNavigate();
@@ -100,26 +100,7 @@ function Loading() {
 
     const fetchUserData = async () => {
       try {
-        const url = new URL(
-          "https://work.brandservicebot.ru/api/get_user_data/",
-        );
-        url.searchParams.set("user_id", String(effectiveUserId));
-
-        const response = await fetch(url.toString(), {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: tg?.initData,
-            // Authorization: String(initData),
-          },
-        });
-
-        if (!response.ok)
-          throw new Error(`GET ${url} → HTTP ${response.status}`);
-
-        const raw = await response.json();
-
-        useAppStore.getState().hydrateFromServer(raw);
+        await fetchAndHydrateUserData(effectiveUserId);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }

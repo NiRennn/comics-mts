@@ -4,8 +4,9 @@ import Promocode from "../Promocode/Promocode";
 import Button from "../Button/Button";
 import { useNavigate } from "react-router-dom";
 import appRoutes from "../../routes/routes";
-import { useAppStore, type FinalResponseDto } from "../../store/appStore";import { useEffect, useMemo, useState } from "react";
-
+import { useAppStore, type FinalResponseDto } from "../../store/appStore";
+import { useEffect, useMemo, useState } from "react";
+import { fetchAndHydrateUserData } from "../../api/userData";
 const API_ORIGIN = "https://work.brandservicebot.ru";
 const FINAL_RESULT_ENDPOINT = `${API_ORIGIN}/api/save_user_data/`;
 
@@ -207,12 +208,31 @@ function Final() {
     };
   }, [loading, error, result, resultImage]);
 
-  const handleRetry = () => {
+  const refreshUserDataBeforeNavigate = async () => {
+    const userId = user?.user_id ?? (window as any).__uid;
+
+    if (!userId) {
+      console.error("user_id not found before navigation");
+      return;
+    }
+
+    try {
+      await fetchAndHydrateUserData(userId);
+    } catch (error) {
+      console.error("Error refreshing user data before navigation:", error);
+    }
+  };
+
+  const handleRetry = async () => {
+    await refreshUserDataBeforeNavigate();
+
     resetTestProgress();
     navigate(appRoutes.TEST);
   };
 
-  const handleGoToMenu = () => {
+  const handleGoToMenu = async () => {
+    await refreshUserDataBeforeNavigate();
+
     resetTestProgress();
     navigate(appRoutes.ONBOARDING);
   };
