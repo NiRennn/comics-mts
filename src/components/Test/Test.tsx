@@ -146,7 +146,7 @@ function Test() {
       </div>
     );
   }
- 
+
   return (
     <div
       className={`Test ${isScreenVisible ? "is-visible" : ""} ${
@@ -155,21 +155,11 @@ function Test() {
     >
       <div className="Test__veil" />
 
-      <img
-        src={bg}
-        alt=""
-        className="Test__background bg Test__fade bgLayer"
-      />
+      <img src={bg} alt="" className="Test__background bg Test__fade bgLayer" />
       <img
         src={bgDots}
         alt=""
         className="Test__background bgDots Test__fade dotsLayer"
-      />
-
-      <div
-        className={`Test__scrub ${isScrubActive ? "is-active" : ""}`}
-        style={{ backgroundImage: `url(${scrubSprite})` }}
-        aria-hidden="true"
       />
 
       <div className="Test__content Test__fade contentLayer">
@@ -178,21 +168,23 @@ function Test() {
             isQuestionVisible ? "is-visible" : ""
           }`}
         >
+          <div
+            className={`Test__scrub ${isScrubActive ? "is-active" : ""}`}
+            style={{ backgroundImage: `url(${scrubSprite})` }}
+            aria-hidden="true"
+          />
           <img
             src={toAbsoluteImageUrl(currentQuestion.picture)}
             alt={`Вопрос ${currentIndex + 1}`}
             className="Test__questionImage"
           />
           <div className="Test__questionTest_wrapper">
-          <img
-            src={toAbsoluteImageUrl(currentQuestion.picture_overlay)}
-            alt={`Вопрос ${currentIndex + 1}`}
-            className="Test__questionTest"
-          />
+            <img
+              src={toAbsoluteImageUrl(currentQuestion.picture_overlay)}
+              alt={`Вопрос ${currentIndex + 1}`}
+              className="Test__questionTest"
+            />
           </div>
-
-          
-
         </div>
 
         <div className={`Test__panel ${isQuestionVisible ? "is-visible" : ""}`}>
