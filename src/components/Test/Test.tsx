@@ -154,7 +154,7 @@ function Test() {
       }`}
     >
       <div className="Test__veil" />
- 
+
       <img src={bg} alt="" className="Test__background bg Test__fade bgLayer" />
       <img
         src={bgDots}
@@ -163,11 +163,7 @@ function Test() {
       />
 
       <div className="Test__content Test__fade contentLayer">
-        <div
-          className={`Test__questionCard ${
-            isQuestionVisible ? "is-visible" : ""
-          }`}
-        >
+        <div className="Test__questionCard">
           <div
             className={`Test__scrub ${isScrubActive ? "is-active" : ""}`}
             style={{ backgroundImage: `url(${scrubSprite})` }}
@@ -187,8 +183,12 @@ function Test() {
           </div>
         </div>
 
-        <div className={`Test__panel ${isQuestionVisible ? "is-visible" : ""}`}>
-          <div className="Test__content_variants">
+        <div className="Test__panel">
+          <div
+            className={`Test__content_variants ${
+              isQuestionVisible ? "is-visible" : ""
+            }`}
+          >
             <Variants
               items={currentQuestion.answers}
               selectedId={currentSelectedAnswerId}
