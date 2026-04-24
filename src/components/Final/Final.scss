@@ -51,8 +51,8 @@
   background-position: top center;
   background-size: 100% 100%;
 
-  --hero-overlap: clamp(100px, 24vw, 190px);
-  --hero-max-width: 430px;
+  --hero-overlap: clamp(50px, 24vw, 190px);
+  --hero-max-width: 400px;
 
   padding-top: calc(var(--hero-overlap) + 24px);
   padding-right: 16px;
@@ -70,11 +70,12 @@
 
 .Final__img {
   position: absolute;
-  left: 50%;
-  bottom: calc(95% - var(--hero-overlap));
-  transform: translateX(-50%);
+  // left: 50%;
+  right: 0;
+  bottom: calc(85% - var(--hero-overlap));
+  // transform: translateX(-50%);
 
-  width: min(100%, var(--hero-max-width));
+  width: min(90%, var(--hero-max-width));
   height: auto;
   display: block;
 

@@ -165,6 +165,7 @@
     );
 
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.4s ease;
   transition-delay: 0.06s;
   will-change: opacity;
@@ -172,6 +173,7 @@
 
 .Test__content_variants.is-visible {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .Test__panel {

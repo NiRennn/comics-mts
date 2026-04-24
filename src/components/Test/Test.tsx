@@ -3,14 +3,19 @@ import bg from "../../assets/images/backgrounds/loader-back.jpg";
 import bgDots from "../../assets/images/backgrounds/loader-dots.png";
 import scrubSprite from "../../assets/images/transitions/scrub.png";
 import Variants from "../Variants/Variants";
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  type AnimationEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useAppStore } from "../../store/appStore";
 import { useNavigate } from "react-router-dom";
 import appRoutes from "../../routes/routes";
 
 const API_ORIGIN = "https://work.brandservicebot.ru";
-const SCRUB_DURATION_MS = 800;
-const SCRUB_SWAP_MS = 420;
+const PRELOAD_TIMEOUT_MS = 250;
 
 const toAbsoluteImageUrl = (src?: string) => {
   if (!src) return "";
@@ -36,12 +41,18 @@ const preloadSingleImage = (src?: string): Promise<void> => {
       } catch {
         // ignore
       }
+
       resolve();
     };
 
     img.onerror = () => resolve();
     img.src = src;
   });
+};
+
+type PendingTransition = {
+  nextIndex: number | null;
+  isLastQuestion: boolean;
 };
 
 function Test() {
@@ -58,8 +69,11 @@ function Test() {
   const [isScreenVisible, setIsScreenVisible] = useState(false);
   const [isQuestionVisible, setIsQuestionVisible] = useState(false);
 
-  const timersRef = useRef<number[]>([]);
   const rafRef = useRef<number | null>(null);
+  const isMountedRef = useRef(false);
+  const isTransitioningRef = useRef(false);
+  const pendingTransitionRef = useRef<PendingTransition | null>(null);
+  const shouldShowVariantsAfterIndexChangeRef = useRef(false);
 
   const totalQuestions = questions.length;
 
@@ -70,23 +84,44 @@ function Test() {
   }, [currentIndex, totalQuestions]);
 
   useEffect(() => {
+    isMountedRef.current = true;
+
     rafRef.current = window.requestAnimationFrame(() => {
       setIsScreenVisible(true);
 
       rafRef.current = window.requestAnimationFrame(() => {
         setIsQuestionVisible(true);
+        rafRef.current = null;
       });
     });
 
     return () => {
-      timersRef.current.forEach((id) => window.clearTimeout(id));
-      timersRef.current = [];
+      isMountedRef.current = false;
 
       if (rafRef.current !== null) {
         window.cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (!shouldShowVariantsAfterIndexChangeRef.current) return;
+
+    shouldShowVariantsAfterIndexChangeRef.current = false;
+
+    if (rafRef.current !== null) {
+      window.cancelAnimationFrame(rafRef.current);
+    }
+
+    rafRef.current = window.requestAnimationFrame(() => {
+      if (!isMountedRef.current) return;
+
+      setIsQuestionVisible(true);
+      isTransitioningRef.current = false;
+      rafRef.current = null;
+    });
+  }, [currentIndex]);
 
   const currentQuestion = useMemo(
     () => questions[currentIndex] ?? null,
@@ -101,41 +136,64 @@ function Test() {
     totalQuestions > 0 && currentIndex === totalQuestions - 1;
 
   const handleSelectAnswer = async (answerId: number) => {
-    if (!currentQuestion || isScrubActive) return;
+    if (!currentQuestion || isTransitioningRef.current) return;
+
+    isTransitioningRef.current = true;
 
     setAnswer(currentQuestion.id, answerId);
 
-    const nextQuestion = !isLastQuestion ? questions[currentIndex + 1] : null;
-    const nextQuestionImage = toAbsoluteImageUrl(nextQuestion?.picture);
+    // Важно: сначала прячем старые варианты.
+    // currentIndex пока НЕ меняем, поэтому fade-out идет со старым текстом.
+    setIsQuestionVisible(false);
+
+    const nextIndex = currentIndex + 1;
+    const nextQuestion = !isLastQuestion ? questions[nextIndex] : null;
+
+    const nextQuestionImages = [
+      toAbsoluteImageUrl(nextQuestion?.picture),
+      toAbsoluteImageUrl(nextQuestion?.picture_overlay),
+    ].filter(Boolean);
 
     await Promise.race([
-      preloadSingleImage(nextQuestionImage),
-      new Promise((resolve) => window.setTimeout(resolve, 250)),
+      Promise.all(nextQuestionImages.map(preloadSingleImage)).then(
+        () => undefined,
+      ),
+      new Promise<void>((resolve) => {
+        window.setTimeout(resolve, PRELOAD_TIMEOUT_MS);
+      }),
     ]);
 
+    if (!isMountedRef.current) return;
+
+    pendingTransitionRef.current = {
+      nextIndex: isLastQuestion ? null : nextIndex,
+      isLastQuestion,
+    };
+
+    // Scrub запускается после начала fade-out вариантов.
     setIsScrubActive(true);
+  };
 
-    const swapTimer = window.setTimeout(() => {
-      if (isLastQuestion) {
-        navigate(appRoutes.FINAL, { replace: true });
-        return;
-      }
+  const handleScrubAnimationEnd = (
+    event: AnimationEvent<HTMLDivElement>,
+  ) => {
+    if (event.animationName !== "test-scrub") return;
 
-      setIsQuestionVisible(false);
-      setCurrentIndex((prev) => prev + 1);
-    }, SCRUB_SWAP_MS);
+    const pendingTransition = pendingTransitionRef.current;
+    if (!pendingTransition) return;
 
-    const finishTimer = window.setTimeout(() => {
-      setIsScrubActive(false);
+    pendingTransitionRef.current = null;
 
-      if (!isLastQuestion) {
-        rafRef.current = window.requestAnimationFrame(() => {
-          setIsQuestionVisible(true);
-        });
-      }
-    }, SCRUB_DURATION_MS);
+    // На последнем вопросе уходим на финал только после окончания scrub.
+    if (pendingTransition.isLastQuestion) {
+      navigate(appRoutes.FINAL, { replace: true });
+      return;
+    }
 
-    timersRef.current.push(swapTimer, finishTimer);
+    // Важно: картинку и варианты меняем только после полного окончания scrub.
+    shouldShowVariantsAfterIndexChangeRef.current = true;
+    setCurrentIndex(pendingTransition.nextIndex ?? 0);
+    setIsScrubActive(false);
   };
 
   if (!currentQuestion) {
@@ -168,12 +226,15 @@ function Test() {
             className={`Test__scrub ${isScrubActive ? "is-active" : ""}`}
             style={{ backgroundImage: `url(${scrubSprite})` }}
             aria-hidden="true"
+            onAnimationEnd={handleScrubAnimationEnd}
           />
+
           <img
             src={toAbsoluteImageUrl(currentQuestion.picture)}
             alt={`Вопрос ${currentIndex + 1}`}
             className="Test__questionImage"
           />
+
           <div className="Test__questionTest_wrapper">
             <img
               src={toAbsoluteImageUrl(currentQuestion.picture_overlay)}
