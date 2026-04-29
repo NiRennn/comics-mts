@@ -16,7 +16,7 @@ export const fetchAndHydrateUserData = async (
   const response = await fetch(url.toString(), {
     method: "GET",
     headers: {
-      "X-Telegram-Init-Data": initData,
+      Authorization: initData,
     },
   });
 

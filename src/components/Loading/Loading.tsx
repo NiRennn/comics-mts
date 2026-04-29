@@ -23,6 +23,8 @@ function Loading() {
   useEffect(() => {
     let navigated = false;
 
+
+    
     const tg = (window as any)?.Telegram?.WebApp;
     tg?.ready?.();
 
@@ -54,6 +56,9 @@ function Loading() {
     const initData = tg?.initData ?? "";
     // const effectiveUserId = 783751626;
     (window as any).__uid = effectiveUserId ?? null;
+
+    console.log(initData)
+
 
     preloadImageSrcs(ONBOARDING_IMAGES).then((results) => {
       const failed = results.filter((r) => !r.ok).map((r) => r.src);
