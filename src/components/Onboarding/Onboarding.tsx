@@ -12,15 +12,24 @@ import { useNavigate } from "react-router-dom";
 import appRoutes from "../../routes/routes";
 import { INFO_IMAGES, FINAL_IMAGES } from "../../config/preloadAssets";
 import { preloadImageSrcs } from "../../utils/preload";
+import { useAppStore } from "../../store/appStore";
 
 const TARIFF_URL = "https://ya.ru";
 
 function Onboarding() {
   const navigate = useNavigate();
+  const rulesAccepted = useAppStore((state) => state.user?.rules === true);
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  const openModal = useCallback(() => setIsOpen(true), []);
+  const handleStart = useCallback(() => {
+    if (rulesAccepted) {
+      navigate(appRoutes.TEST);
+      return;
+    }
+
+    setIsOpen(true);
+  }, [rulesAccepted, navigate]);
   const closeModal = useCallback(() => setIsOpen(false), []);
 
   useEffect(() => {
@@ -77,14 +86,14 @@ function Onboarding() {
               Сможешь не&nbsp;погрязнуть в&nbsp;бытовухе? Разбираешься&nbsp;ли
               со&nbsp;счётчиками и&nbsp;оплатой коммуналки? Отличишь стиральную
               машину от&nbsp;кофемашины? Пройди тест, узнай свои шансы
-              на&nbsp;самостоятельную жизнь и&nbsp;получи шанс выиграть годовую аренду
-              комнаты от&nbsp;РИИЛ x&nbsp;Colife. Для&nbsp;участия
+              на&nbsp;самостоятельную жизнь и&nbsp;получи шанс выиграть годовую
+              аренду комнаты от&nbsp;РИИЛ x&nbsp;Colife. Для&nbsp;участия
               в&nbsp;розыгрыше у&nbsp;тебя должен быть подключён тариф&nbsp;РИИЛ
             </p>
           </div>
 
           <div className="Onboarding__content_buttonBlock">
-            <Button variant="primary" onClick={openModal}>
+            <Button variant="primary" onClick={handleStart}>
               Начать
             </Button>
 

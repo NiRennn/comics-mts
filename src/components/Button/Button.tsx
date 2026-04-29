@@ -8,6 +8,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: Variant;
   size?: Size;
   loading?: boolean;
+  disabled?: boolean;
 };
 
 function cn(...parts: Array<string | false | undefined | null>) {

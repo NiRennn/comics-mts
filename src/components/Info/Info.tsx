@@ -8,15 +8,25 @@ import { useNavigate } from "react-router-dom";
 import appRoutes from "../../routes/routes";
 import { useState, useCallback, useEffect, useMemo } from "react";
 import Modal from "../Modal/Modal";
+import { useAppStore } from "../../store/appStore";
 
 function Info() {
   const navigate = useNavigate();
   const tg = useMemo(() => (window as any)?.Telegram?.WebApp, []);
 
+  const rulesAccepted = useAppStore((state) => state.user?.rules === true);
+
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  const openModal = useCallback(() => setIsOpen(true), []);
+  const handleStartTest = useCallback(() => {
+    if (rulesAccepted) {
+      navigate(appRoutes.TEST);
+      return;
+    }
+
+    setIsOpen(true);
+  }, [rulesAccepted, navigate]);
   const closeModal = useCallback(() => setIsOpen(false), []);
 
   const handleBack = useCallback(() => {
@@ -87,14 +97,14 @@ function Info() {
 
             <p className="Info__content_subtitle sbold m25 Info__fade panelStrongLayer">
               Участники, которые дадут больше всего правильных ответов, смогут
-              побороться за&nbsp;главный приз&nbsp;&mdash; годовую аренду комнаты
-              в&nbsp;Colife.
+              побороться за&nbsp;главный приз&nbsp;&mdash; годовую аренду
+              комнаты в&nbsp;Colife.
             </p>
 
             <Button
               variant="primary"
               className="m25 Info__fade buttonLayer"
-              onClick={openModal}
+              onClick={handleStartTest}
             >
               Начать тест
             </Button>
