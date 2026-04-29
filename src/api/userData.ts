@@ -16,7 +16,8 @@ export const fetchAndHydrateUserData = async (
   const response = await fetch(url.toString(), {
     method: "GET",
     headers: {
-      Authorization: initData,
+      "Content-Type": "application/json",
+      Authorization: initData as string,
     },
   });
 
