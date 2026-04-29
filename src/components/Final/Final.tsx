@@ -10,6 +10,10 @@ import { fetchAndHydrateUserData } from "../../api/userData";
 const API_ORIGIN = "https://work.brandservicebot.ru";
 const FINAL_RESULT_ENDPOINT = `${API_ORIGIN}/api/save_user_data/`;
 
+  const getTelegramInitData = () => {
+    return (window as any)?.Telegram?.WebApp?.initData ?? "";
+  };
+
 type ApiPromoCodeDto = {
   code: string;
   used_dt: string;
@@ -92,6 +96,8 @@ function Final() {
     return () => window.cancelAnimationFrame(rafId);
   }, []);
 
+
+
   useEffect(() => {
     const controller = new AbortController();
 
@@ -115,6 +121,14 @@ function Final() {
         return;
       }
 
+      const initData = getTelegramInitData();
+
+      if (!initData) {
+        console.error("Telegram initData is empty");
+        setError("Не удалось подтвердить пользователя Telegram");
+        return;
+      }
+
       try {
         setLoading(true);
         setError("");
@@ -123,6 +137,7 @@ function Final() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: initData,
           },
           body: JSON.stringify({
             user_id: user.user_id,
@@ -154,10 +169,13 @@ function Final() {
         setFinalResponse(normalizedData);
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") return;
+
         console.error("Ошибка получения финального результата:", err);
         setError("Не удалось загрузить результат");
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
@@ -216,8 +234,15 @@ function Final() {
       return;
     }
 
+    const initData = getTelegramInitData();
+
+    if (!initData) {
+      console.error("Telegram initData is empty before navigation");
+      return;
+    }
+
     try {
-      await fetchAndHydrateUserData(userId);
+      await fetchAndHydrateUserData(userId, initData);
     } catch (error) {
       console.error("Error refreshing user data before navigation:", error);
     }

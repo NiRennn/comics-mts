@@ -23,16 +23,14 @@ function Loading() {
   useEffect(() => {
     let navigated = false;
 
-
+    const tg = (window as any)?.Telegram?.WebApp;
+    tg?.ready?.();
 
     const go = (to: string) => {
       if (navigated) return;
       navigated = true;
       navigate(to, { replace: true });
     };
-
-    const tg = (window as any)?.Telegram?.WebApp;
-    tg?.ready?.();
 
     const getEffectiveUserId = (): number | null => {
       try {
@@ -53,6 +51,7 @@ function Loading() {
     };
 
     const effectiveUserId = getEffectiveUserId();
+    const initData = tg?.initData ?? "";
     // const effectiveUserId = 783751626;
     (window as any).__uid = effectiveUserId ?? null;
 
@@ -63,6 +62,10 @@ function Loading() {
 
     if (!effectiveUserId) {
       console.error("effectiveUserId not found");
+      return;
+    }
+    if (!initData) {
+      console.error("Telegram initData is empty");
       return;
     }
 
@@ -99,7 +102,7 @@ function Loading() {
 
     const fetchUserData = async () => {
       try {
-        await fetchAndHydrateUserData(effectiveUserId);
+        await fetchAndHydrateUserData(effectiveUserId, initData);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
