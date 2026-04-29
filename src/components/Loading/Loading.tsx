@@ -57,7 +57,7 @@ function Loading() {
     // const effectiveUserId = 783751626;
     (window as any).__uid = effectiveUserId ?? null;
 
-    // console.log(initData)
+    console.log(initData)
 
 
     preloadImageSrcs(ONBOARDING_IMAGES).then((results) => {
