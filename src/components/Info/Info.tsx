@@ -7,9 +7,9 @@ import dots from "../../assets/images/onboarding/ob-bg-dot.png";
 import Button from "../Button/Button";
 import { useNavigate } from "react-router-dom";
 import appRoutes from "../../routes/routes";
-import { useState, useCallback, useEffect, useMemo } from "react";
 import Modal from "../Modal/Modal";
 import { useAppStore } from "../../store/appStore";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 
 function Info() {
   const navigate = useNavigate();
@@ -19,6 +19,47 @@ function Info() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+
+  const handleMouseDown = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      const carousel = carouselRef.current;
+      if (!carousel) return;
+
+      isDraggingRef.current = true;
+      startXRef.current = event.pageX - carousel.offsetLeft;
+      scrollLeftRef.current = carousel.scrollLeft;
+
+      carousel.classList.add("is-dragging");
+    },
+    [],
+  );
+
+  const handleMouseMove = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      const carousel = carouselRef.current;
+      if (!carousel || !isDraggingRef.current) return;
+
+      event.preventDefault();
+
+      const x = event.pageX - carousel.offsetLeft;
+      const walk = x - startXRef.current;
+
+      carousel.scrollLeft = scrollLeftRef.current - walk;
+    },
+    [],
+  );
+
+  const stopDragging = useCallback(() => {
+    const carousel = carouselRef.current;
+
+    isDraggingRef.current = false;
+    carousel?.classList.remove("is-dragging");
+  }, []);
 
   const handleStartTest = useCallback(() => {
     if (rulesAccepted) {
@@ -119,7 +160,15 @@ function Info() {
         </h1>
 
         <div className="Info__content_carousel Info__fade carouselLayer">
-          <div className="Info__content_carousel_track">
+          <div
+            ref={carouselRef}
+            className="Info__content_carousel_track"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={stopDragging}
+            onMouseLeave={stopDragging}
+          >
+            {" "}
             <div className="Info__content_slide">
               <img
                 src={photo}
@@ -127,7 +176,6 @@ function Info() {
                 className="Info__content_slide_img"
               />
             </div>
-
             <div className="Info__content_slide">
               <img
                 src={photo2}
@@ -135,7 +183,6 @@ function Info() {
                 className="Info__content_slide_img"
               />
             </div>
-
             <div className="Info__content_slide">
               <img
                 src={photo3}
