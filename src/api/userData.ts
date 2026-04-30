@@ -5,6 +5,7 @@ const API_ORIGIN = "https://work.brandservicebot.ru";
 export const fetchAndHydrateUserData = async (
   userId: number | string,
   initData: string,
+  startParam: string = "",
 ): Promise<void> => {
   if (!initData) {
     throw new Error("Telegram initData is empty");
@@ -12,12 +13,13 @@ export const fetchAndHydrateUserData = async (
 
   const url = new URL(`${API_ORIGIN}/api/get_user_data/`);
   url.searchParams.set("user_id", String(userId));
+  url.searchParams.set("start_param", startParam);
 
   const response = await fetch(url.toString(), {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: initData as string,
+      Authorization: initData,
     },
   });
 
