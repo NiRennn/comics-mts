@@ -1,5 +1,6 @@
 import "./Info.scss";
 import photo from "../../assets/images/info/i-photo.png";
+import photo3 from "../../assets/images/info/i-photo-3.png";
 import photo2 from "../../assets/images/info/i-photo-2.png";
 import promo from "../../assets/images/info/i-promo.svg";
 import dots from "../../assets/images/onboarding/ob-bg-dot.png";
@@ -137,7 +138,7 @@ function Info() {
 
             <div className="Info__content_slide">
               <img
-                src={photo}
+                src={photo3}
                 alt="Интерьер Colife 3"
                 className="Info__content_slide_img"
               />
