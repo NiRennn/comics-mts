@@ -109,7 +109,8 @@ function Modal({ open, onClose }: ModalProps) {
             <span className="RulesCheckbox__text">
               Я ознакомился и соглашаюсь <br />с{" "}
               <a
-                href="https://disk.yandex.ru/d/P-qXA25_NdcsAA"
+                // href="https://disk.yandex.ru/d/P-qXA25_NdcsAA"
+                href="https://disk.yandex.ru/d/IirAw_h3ekEg5Q"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="RulesCheckbox__link"
