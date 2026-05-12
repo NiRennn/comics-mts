@@ -14,7 +14,7 @@ import { INFO_IMAGES, FINAL_IMAGES } from "../../config/preloadAssets";
 import { preloadImageSrcs } from "../../utils/preload";
 import { useAppStore } from "../../store/appStore";
 
-const TARIFF_URL = "https://moskva.mts.ru/personal/mobilnaya-svyaz/tarifi/vse-tarifi/riil?utm_source=mrk_sp&utm_medium=tg&utm_campaign=msc_mts_riil_q2_26&utm_term=test_vzroslay_zhizn";
+const TARIFF_URL = "https://moskva.mts.ru/personal/mobilnaya-svyaz/uslugi/mobilnaya-svyaz/riil-tarif?utm_source=mrk_sp&utm_medium=banner&utm_campaign=mcs_riil_q2_26&utm_term=testvzroslaya";
 
 function Onboarding() {
   const navigate = useNavigate();
